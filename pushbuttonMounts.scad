@@ -13,33 +13,71 @@ $fn = 100;
 
 
 holeDia = 15;
-holeWallThickness = 5;
-flipped = false;
 
-keyedWidth = 2;
-tol = 0.4;
 
-// Other information
+
+
+// Things that should only be tweaked if you know what you're doing
+
 tactSwHeight = 5; // average tact switch height (top off tact button to bottom of base)
 
-
-printedButtonFlangeThickness = 3;	// Shouldn't need to be adjusted
+holeWallThickness = 5;
+keyedWidth = 2;
+tol = 0.4;
+printedButtonFlangeThickness = 3;
 printedButtonLength = 2;
 printedButtonWidth = 3;
 height = tactSwHeight + printedButtonFlangeThickness;
+//ledHeight = x; 
 
 type = "tactSwitch"; // [tactSwitch, 5mmLed, 3mmLed]
 
 
 // Test it!
-//pbMount(holeDia,height);
-pbCap(holeDia, type);
+// User should be able to make whatever size button they want plus just choose type and not need to worry about smaller details
+// Also able to do a custom hole if needed (but shouldn't need to make a custom one)
 
-module pbMount(holeDia, height, flipped = false)
+//pbMount(holeDia, type, flipped = false);
+pbCap(holeDia, type, flipped = false);
+
+module pbMount(holeDia, type, flipped)
+{
+	if( type == "tactSwitch")
+	{
+		pbCustomMount(holeDia, height, flipped);
+	}
+	else if(type == "5mm led")
+	{
+		
+	}
+	else if(type =="3mm led")
+	{
+		
+	}
+}
+
+module pbCap(holeDia, type, flipped = false)
+{
+	if( type == "tactSwitch")
+	{
+		pbCustomCap(holeDia,height, type);
+	}
+	else if(type == "5mm led")
+	{
+		
+	}
+	else if(type =="3mm led")
+	{
+		
+	}
+	
+}
+
+module pbCustomMount(holeDia, height, type, flipped = false)
 {
 	if(flipped == true)
 		rotate([180,0,0])
-			children();
+			children();	// not sure if works
 		
 	difference()
 	{
@@ -58,7 +96,7 @@ module pbMount(holeDia, height, flipped = false)
 }
 
 // Creates the bottom cap which contains the tact switch or led
-module pbCap(holeDia, type = "tactSwitch")
+module pbCustomCap(holeDia, height, type = "tactSwitch")
 {
 	bottomPlateThickness = 1.6;
 	sideThickness = 1;
@@ -77,7 +115,7 @@ module pbCap(holeDia, type = "tactSwitch")
 				{
 					for(y = [1, -1])				{
 						
-						#translate([tactSwitchLegSpacing/2 * x, tactSwitchLegSpacing/2 * y,])
+						translate([tactSwitchLegSpacing/2 * x, tactSwitchLegSpacing/2 * y,])
 							cylinder(d = 1, h = bottomPlateThickness + 0.01);
 					}
 
@@ -106,6 +144,4 @@ module pbCap(holeDia, type = "tactSwitch")
 			
 		}
 	}
-	
-	
 }
